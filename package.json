@@ -1,0 +1,20 @@
+{
+  "name": "winduum-stimulus",
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@newlogic-digital/utils-js": "^0.2.3",
+    "winduum": "^1.2.1"
+  },
+  "files": [
+    "src"
+  ],
+  "exports": {
+    "./src/*": "./src/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winduum/winduum-stimulus.git"
+  }
+}
