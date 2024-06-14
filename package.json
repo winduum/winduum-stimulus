@@ -8,10 +8,12 @@
     "winduum": "^1.2.1"
   },
   "files": [
-    "src"
+    "components",
+    "utilities"
   ],
   "exports": {
-    "./src/*": "./src/*"
+    "./components/*": "./components/*",
+    "./utilities/*": "./utilities/*"
   },
   "repository": {
     "type": "git",
