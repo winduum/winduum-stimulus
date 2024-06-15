@@ -1,10 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class Invoke extends Controller {
-    action (event) {
+    controller (event) {
+        const [controller, action] = event.params.action.split('#')
+
         this.application.getControllerForElementAndIdentifier(
-            document.getElementById(event.params.target),
-            event.params.controller
-        )[event.params.action](event)
+            event.params.target ? document.querySelector(event.params.target) : document.querySelector(`.${controller}`),
+            controller
+        )[action](event)
     }
 }
