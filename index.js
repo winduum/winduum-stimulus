@@ -1,4 +1,4 @@
-import { initActions, initControllers } from "@newlogic-digital/utils-js"
+import { initActions, initControllers } from '@newlogic-digital/utils-js'
 
 export const initStimulus = (element, { controllers, actions }) => {
     initControllers(element, controllers)

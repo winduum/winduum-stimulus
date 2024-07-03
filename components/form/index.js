@@ -1,17 +1,17 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 import { validateForm, validateField } from 'winduum/src/components/form/index.js'
 
 export default class Form extends Controller {
-    connect () {
+    connect() {
         this.element.noValidate = true
         this.element.addEventListener('submit', this.validateForm)
     }
 
-    validateForm (event) {
+    validateForm(event) {
         validateForm(event)
     }
 
-    validateField ({ currentTarget }) {
+    validateField({ currentTarget }) {
         validateField(currentTarget)
     }
 }

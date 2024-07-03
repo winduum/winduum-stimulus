@@ -1,7 +1,7 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class Invoke extends Controller {
-    controller (event) {
+    controller(event) {
         const [controller, action] = event.currentTarget.dataset.invokeAction.split('#')
 
         this.application.getControllerForElementAndIdentifier(
