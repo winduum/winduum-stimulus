@@ -21,10 +21,10 @@ export default class Dialog extends Controller {
     async show({ params }) {
         const dialogElement = !params.url ? document.querySelector(params.target) : await this.fetch()
 
-        await showDialog(dialogElement, { remove: params.url, ...params })
+        await showDialog(dialogElement ?? this.element, { remove: params.url, ...params })
     }
 
-    async close({ currentTarget, params }) {
-        await closeDialog(document.querySelector(params?.target) ?? currentTarget.closest('dialog'), params)
+    async close({ params }) {
+        await closeDialog(document.querySelector(params?.target) ?? this.element, params)
     }
 }
