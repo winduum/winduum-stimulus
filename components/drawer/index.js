@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { scrollDrawer, showDrawer, closeDrawer } from 'winduum/src/components/drawer/index.js'
 
-export default class Drawer extends Controller {
+export class Drawer extends Controller {
     static values = {
         placement: {
             type: String,

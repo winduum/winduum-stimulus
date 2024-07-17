@@ -13,7 +13,7 @@ export class Popover extends Controller {
         const { togglePopover } = await import('winduum/src/components/popover/index.js')
         const hasUrlValue = this.hasUrlValue && !this.popoverTarget
 
-        if (hasUrlValue) await this.fetch({ params })
+        if (hasUrlValue) await this.fetch({ currentTarget })
 
         this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
 
@@ -60,9 +60,9 @@ export class Popover extends Controller {
         if (!this.popoverActionTarget) return
 
         ;(!this.hasManualValue || !this.manualValue) && dataset(this.popoverActionTarget, 'action').add(
-            `click->c-popover#${this.popoverActionTarget.getAttribute('popovertargetaction')}:prevent`,
-            'keydown.esc@window->c-popover#hide',
-            'click@window->c-popover#dismiss'
+            `click->${this.identifier}#${this.popoverActionTarget.getAttribute('popovertargetaction')}:prevent`,
+            `keydown.esc@window->${this.identifier}#hide`,
+            `click@window->${this.identifier}#dismiss`
         )
     }
 }

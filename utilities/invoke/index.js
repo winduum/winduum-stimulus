@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { fetchElement } from '../index.js'
 
-export default class Invoke extends Controller {
+export class Invoke extends Controller {
     onFetchComplete() {}
 
     async controller({ currentTarget }) {

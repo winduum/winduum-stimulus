@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { dispatchEvent } from '@newlogic-digital/utils-js'
 
-export default class Control extends Controller {
+export class Control extends Controller {
     stepUp() {
         this.element.querySelector('input').stepUp()
         dispatchEvent(this.element.querySelector('input'))
