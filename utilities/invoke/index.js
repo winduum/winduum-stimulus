@@ -1,32 +1,20 @@
 import { Controller } from '@hotwired/stimulus'
-import { fetchContent } from '../index.js'
-import { getId } from '@newlogic-digital/utils-js'
+import { fetchElement } from '../index.js'
 
 export default class Invoke extends Controller {
-    async fetch(element, url, appendTo) {
-        const content = await fetchContent(element, url)
-        const contentElement = new DOMParser().parseFromString(content, 'text/html').body.firstChild
-
-        contentElement.id = contentElement.getAttribute('id') ?? getId()
-
-        appendTo ? document.querySelector(appendTo).append(contentElement) : element.after(contentElement)
-
-        this.onFetchComplete()
-
-        return contentElement
-    }
-
     onFetchComplete() {}
 
     async controller({ currentTarget }) {
         const [controller, action] = currentTarget.dataset.invokeAction.split('#')
 
         if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
-            const fetchedElement = await this.fetch(
+            const fetchedElement = await fetchElement(
                 currentTarget,
                 currentTarget.dataset.invokeUrl,
                 currentTarget.dataset.invokeAppendTo
             )
+
+            this.onFetchComplete()
 
             currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
         }

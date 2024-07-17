@@ -1,11 +1,11 @@
 import { Controller } from '@hotwired/stimulus'
 import { dataset } from '@newlogic-digital/utils-js'
-import { fetchContent } from '../../utilities/index.js'
+import { fetchElement } from '../../utilities/index.js'
 
 export class Popover extends Controller {
     static values = {
         url: String,
-        insertTo: String,
+        appendTo: String,
         manual: Boolean
     }
 
@@ -19,6 +19,8 @@ export class Popover extends Controller {
 
         await togglePopover(currentTarget, params)
     }
+
+    // TODO show method
 
     async hide() {
         if (this.popoverActionTarget.ariaExpanded !== 'true') return
@@ -36,10 +38,16 @@ export class Popover extends Controller {
         }
     }
 
-    async fetch(event) {
-        const content = await fetchContent(event)
-        const insertElement = !this.hasInsertToValue ? this.popoverActionTarget : document.querySelector(this.insertToValue)
-        insertElement.insertAdjacentHTML(!this.hasInsertToValue ? 'afterend' : 'beforeend', content)
+    async fetch({ currentTarget }) {
+        const fetchedElement = await fetchElement(
+            currentTarget,
+            this.urlValue,
+            this.appendToValue
+        )
+
+        if (!currentTarget.getAttribute('popovertarget')) {
+            currentTarget.setAttribute('popovertarget', fetchedElement.id)
+        }
 
         this.onFetchComplete()
     }
