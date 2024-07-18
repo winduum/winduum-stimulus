@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { scrollDrawer, showDrawer, closeDrawer } from 'winduum/src/components/drawer/index.js'
 
 export class Drawer extends Controller {
     static values = {
@@ -20,6 +19,8 @@ export class Drawer extends Controller {
     }
 
     async scroll({ target }) {
+        const { scrollDrawer } = await import('winduum/src/components/drawer/index.js')
+
         const bottomTop = {
             snapClass: 'snap-y snap-mandatory',
             scrollSize: target.scrollHeight - target.clientHeight,
@@ -52,6 +53,8 @@ export class Drawer extends Controller {
     }
 
     async show() {
+        const { showDrawer } = await import('winduum/src/components/drawer/index.js')
+
         const placement = {
             right: [this.element.scrollWidth],
             bottom: [this.element.scrollHeight, 'top'],
@@ -61,7 +64,9 @@ export class Drawer extends Controller {
         await showDrawer(this.element, placement[this.placementValue][0], placement[this.placementValue][1])
     }
 
-    async close({ params }) {
+    async close() {
+        const { closeDrawer } = await import('winduum/src/components/drawer/index.js')
+
         const placement = {
             right: [0],
             bottom: [0, 'top'],
