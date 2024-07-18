@@ -18,14 +18,14 @@ export class Range extends Controller {
     }
 
     async connect() {
-        await this.set({
+        await this.setValue({
             currentTarget: this.element.querySelectorAll('input[type="range"]')[0],
             params: {
                 track: 'start'
             }
         })
 
-        await this.set({
+        await this.setValue({
             currentTarget: this.element.querySelectorAll('input[type="range"]')[1],
             params: {
                 track: 'end'
