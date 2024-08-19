@@ -14,7 +14,7 @@ export class Invoke extends Controller {
                 currentTarget.dataset.invokeAppendTo
             )
 
-            this.onFetchComplete()
+            this.onFetchComplete(fetchedElement)
 
             currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
         }
