@@ -1,15 +1,25 @@
 import { Controller } from '@hotwired/stimulus'
 
 export class Dialog extends Controller {
-    async show({ params }) {
-        const { showDialog } = await import('winduum/src/components/dialog/index.js')
-
-        await showDialog(this.element, params)
+    static values = {
+        params: Object
     }
 
-    async close({ params }) {
+    initialize() {
+        if (this.element.hasAttribute('data-open')) {
+            this.show({ params: this.paramsValue ?? {} })
+        }
+    }
+
+    async show(event) {
+        const { showDialog } = await import('winduum/src/components/dialog/index.js')
+
+        await showDialog(this.element, this.paramsValue ?? event?.params)
+    }
+
+    async close(event) {
         const { closeDialog } = await import('winduum/src/components/dialog/index.js')
 
-        await closeDialog(this.element, params)
+        await closeDialog(this.element, this.paramsValue ?? event?.params)
     }
 }
