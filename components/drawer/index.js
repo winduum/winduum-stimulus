@@ -10,8 +10,8 @@ export class Drawer extends Controller {
 
     connect() {
         const placement = {
-            left: /left/.test(this.placementValue) ? this.element.scrollWidth : /right/.test(this.placementValue) ? 0 : null,
-            top: /top/.test(this.placementValue) ? this.element.scrollHeight : /bottom/.test(this.placementValue) ? 0 : null
+            left: this.placementValue === 'left' ? this.element.scrollWidth : this.placementValue === 'right' ? 0 : null,
+            top: this.placementValue === 'top' ? this.element.scrollHeight : this.placementValue === 'bottom' ? 0 : null
         }
 
         this.element.scroll({ ...placement, behavior: 'instant' })
@@ -55,24 +55,24 @@ export class Drawer extends Controller {
     async show() {
         const { showDrawer } = await import('winduum/src/components/drawer/index.js')
 
-        const placement = {
-            right: [this.element.scrollWidth],
+        const [distance, direction] = {
+            right: [this.element.scrollWidth, 'left'],
             bottom: [this.element.scrollHeight, 'top'],
             top: [0, 'top']
-        }
+        }[this.placementValue] ?? []
 
-        await showDrawer(this.element, placement[this.placementValue][0], placement[this.placementValue][1])
+        await showDrawer(this.element, distance, direction)
     }
 
     async close() {
         const { closeDrawer } = await import('winduum/src/components/drawer/index.js')
 
-        const placement = {
-            right: [0],
+        const [distance, direction] = {
+            right: [0, 'left'],
             bottom: [0, 'top'],
             top: [this.element.scrollHeight, 'top']
-        }
+        }[this.placementValue] ?? []
 
-        await closeDrawer(this.element, placement[this.placementValue][0], placement[this.placementValue][1])
+        await closeDrawer(this.element, distance, direction)
     }
 }
