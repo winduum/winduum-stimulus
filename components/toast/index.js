@@ -2,10 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 
 export class Toast extends Controller {
     static values = {
-        show: {
-            type: Object,
-            default: {}
-        }
+        show: Object
     }
 
     async connect() {
