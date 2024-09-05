@@ -5,17 +5,11 @@ export class Drawer extends Controller {
         placement: {
             type: String,
             default: 'left'
+        },
+        dialog: {
+            type: String,
+            default: 'modal'
         }
-    }
-
-    connect() {
-        const placement = {
-            left: this.placementValue === 'left' ? this.element.scrollWidth : this.placementValue === 'right' ? 0 : null,
-            top: this.placementValue === 'top' ? this.element.scrollHeight : this.placementValue === 'bottom' ? 0 : null
-        }
-
-        this.element.scroll({ ...placement, behavior: 'instant' })
-        this.element.classList.remove('invisible')
     }
 
     async scroll({ target }) {
@@ -53,13 +47,21 @@ export class Drawer extends Controller {
     }
 
     async show() {
-        const { showDrawer } = await import('winduum/src/components/drawer/index.js')
+        const { showDrawer, scrollInitDrawer } = await import('winduum/src/components/drawer/index.js')
 
-        const [distance, direction] = {
-            right: [this.element.scrollWidth, 'left'],
-            bottom: [this.element.scrollHeight, 'top'],
-            top: [0, 'top']
+        if (this.dialogValue === 'modal') {
+            this.element.showModal()
+        } else if (this.dialogValue === 'non-modal') {
+            this.element.show()
+        }
+
+        const [distance, distanceClosed, direction] = {
+            right: [this.element.scrollWidth, 0, 'left'],
+            bottom: [this.element.scrollHeight, 0, 'top'],
+            top: [0, this.element.scrollHeight, 'top']
         }[this.placementValue] ?? []
+
+        await scrollInitDrawer(this.element, distanceClosed, direction)
 
         await showDrawer(this.element, distance, direction)
     }
