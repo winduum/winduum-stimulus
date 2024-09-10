@@ -3,6 +3,8 @@ import { dataset } from '@newlogic-digital/utils-js'
 import { fetchElement } from '../../utilities/index.js'
 
 export class Popover extends Controller {
+    static targets = ['action']
+
     static values = {
         url: String,
         appendTo: String,
@@ -23,17 +25,17 @@ export class Popover extends Controller {
     // TODO show method
 
     async hide() {
-        if (this.popoverActionTarget.ariaExpanded !== 'true') return
+        if (this.actionTarget.ariaExpanded !== 'true') return
 
         const { hidePopover } = await import('winduum/src/components/popover/index.js')
 
-        await hidePopover(this.popoverActionTarget)
+        await hidePopover(this.actionTarget)
     }
 
     async dismiss({ target }) {
-        if (this.popoverActionTarget.ariaExpanded !== 'true') return
+        if (this.actionTarget.ariaExpanded !== 'true') return
 
-        if (!this.popoverTarget.contains(target) && !this.popoverActionTarget.isEqualNode(target) && this.popoverActionTarget.ariaExpanded === 'true') {
+        if (!this.popoverTarget.contains(target) && !this.actionTarget.isEqualNode(target) && this.actionTarget.ariaExpanded === 'true') {
             await this.hide()
         }
     }
@@ -54,15 +56,15 @@ export class Popover extends Controller {
 
     onFetchComplete() {}
 
-    connect() {
-        this.popoverActionTarget = this.element.querySelector('[popovertargetaction]')
-
-        if (!this.popoverActionTarget) return
-
-        ;(!this.hasManualValue || !this.manualValue) && dataset(this.popoverActionTarget, 'action').add(
-            `click->${this.identifier}#${this.popoverActionTarget.getAttribute('popovertargetaction')}:prevent`,
+    actionTargetConnected() {
+        ;(!this.hasManualValue || !this.manualValue) && dataset(this.actionTarget, 'action').add(
+            `click->${this.identifier}#${this.actionTarget.getAttribute('popovertargetaction')}:prevent`,
             `keydown.esc@window->${this.identifier}#hide`,
             `click@window->${this.identifier}#dismiss`
         )
+    }
+
+    connect() {
+        this.element.querySelector('[popovertargetaction]').setAttribute(`data-${this.identifier}-target`, 'action')
     }
 }
