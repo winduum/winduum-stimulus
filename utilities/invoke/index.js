@@ -1,23 +1,12 @@
 import { Controller } from '@hotwired/stimulus'
-import { fetchElement } from '../index.js'
 
 export class Invoke extends Controller {
-    onFetchComplete() {}
+    onBeforeInvoke() {}
 
     async controller({ currentTarget }) {
         const [controller, action] = currentTarget.dataset.invokeAction.split('#')
 
-        if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
-            const fetchedElement = await fetchElement(
-                currentTarget,
-                currentTarget.dataset.invokeUrl,
-                currentTarget.dataset.invokeAppendTo
-            )
-
-            this.onFetchComplete(fetchedElement)
-
-            currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
-        }
+        this.onBeforeInvoke()
 
         this.application.getControllerForElementAndIdentifier(
             document.querySelector(currentTarget.dataset.invokeTarget ?? `.${controller}`),

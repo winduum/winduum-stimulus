@@ -1,6 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
 import { dataset } from '@newlogic-digital/utils-js'
-import { fetchElement } from '../../utilities/index.js'
 
 export class Popover extends Controller {
     static targets = ['action']
@@ -13,16 +12,11 @@ export class Popover extends Controller {
 
     async toggle({ currentTarget, params }) {
         const { togglePopover } = await import('winduum/src/components/popover/index.js')
-        const hasUrlValue = this.hasUrlValue && !this.popoverTarget
-
-        if (hasUrlValue) await this.fetch({ currentTarget })
 
         this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
 
         await togglePopover(currentTarget, params)
     }
-
-    // TODO show method
 
     async hide() {
         if (this.actionTarget.ariaExpanded !== 'true') return
@@ -39,22 +33,6 @@ export class Popover extends Controller {
             await this.hide()
         }
     }
-
-    async fetch({ currentTarget }) {
-        const fetchedElement = await fetchElement(
-            currentTarget,
-            this.urlValue,
-            this.appendToValue
-        )
-
-        if (!currentTarget.getAttribute('popovertarget')) {
-            currentTarget.setAttribute('popovertarget', fetchedElement.id)
-        }
-
-        this.onFetchComplete()
-    }
-
-    onFetchComplete() {}
 
     actionTargetConnected() {
         ;(!this.hasManualValue || !this.manualValue) && dataset(this.actionTarget, 'action').add(
