@@ -33,9 +33,9 @@ export class Button extends Controller {
         const { showRipple } = await import('winduum/src/utilities/ripple')
 
         showRipple({
-            currentTarget,
-            offsetX,
-            offsetY
+            element: currentTarget,
+            x: offsetX,
+            y: offsetY
         })
     }
 }
