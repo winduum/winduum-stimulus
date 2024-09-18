@@ -4,12 +4,6 @@ import { dataset } from '@newlogic-digital/utils-js'
 export class Popover extends Controller {
     static targets = ['action']
 
-    static values = {
-        url: String,
-        appendTo: String,
-        manual: Boolean
-    }
-
     async toggle({ currentTarget, params }) {
         const { togglePopover } = await import('winduum/src/components/popover/index.js')
 
@@ -35,14 +29,10 @@ export class Popover extends Controller {
     }
 
     actionTargetConnected() {
-        ;(!this.hasManualValue || !this.manualValue) && dataset(this.actionTarget, 'action').add(
+        dataset(this.actionTarget, 'action').add(
             `click->${this.identifier}#${this.actionTarget.getAttribute('popovertargetaction')}:prevent`,
             `keydown.esc@window->${this.identifier}#hide`,
             `click@window->${this.identifier}#dismiss`
         )
-    }
-
-    connect() {
-        this.element.querySelector('[popovertargetaction]').setAttribute(`data-${this.identifier}-target`, 'action')
     }
 }

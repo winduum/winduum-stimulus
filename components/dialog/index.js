@@ -2,13 +2,12 @@ import { Controller } from '@hotwired/stimulus'
 
 export class Dialog extends Controller {
     static values = {
+        show: String,
         params: Object
     }
 
     initialize() {
-        if (this.element.hasAttribute('data-open')) {
-            this.show({ params: this.paramsValue ?? {} })
-        }
+        if (this.hasShowValue) this.show({ params: this.paramsValue ?? {} })
     }
 
     async show(event) {

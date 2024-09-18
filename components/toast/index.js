@@ -2,22 +2,23 @@ import { Controller } from '@hotwired/stimulus'
 
 export class Toast extends Controller {
     static values = {
-        show: Object
+        show: String,
+        params: Object
     }
 
-    async connect() {
-        if (this.hasShowValue) await this.show({ params: this.showValue })
+    initialize() {
+        if (this.hasShowValue) this.show({ params: this.paramsValue ?? {} })
     }
 
-    async show({ params }) {
+    async show(event) {
         const { showToast } = await import('winduum/src/components/toaster/index.js')
 
-        await showToast(this.element, params)
+        await showToast(this.element, this.paramsValue ?? event?.params)
     }
 
-    async close({ params }) {
+    async close(event) {
         const { closeToast } = await import('winduum/src/components/toaster/index.js')
 
-        await closeToast(this.element, params)
+        await closeToast(this.element, this.paramsValue ?? event?.params)
     }
 }
