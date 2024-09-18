@@ -16,21 +16,21 @@ application.register('x-dialog', Dialog)
 
 ### Local imports
 By default, imports are directly from `npm` so you can leverage updates.
-Alternatively you can also copy and paste the code from this directory to your project and remap the imports to local.
+Alternatively, you can also copy and paste the code from this directory to your project and remap the imports to local.
 
 ```js
-import { Dialog } from '@/components/dialog/index.js'
+import { Dialog } from '@/components/ui/dialog/index.js'
 ```
 
 ### Docs
-Visit [docs](https://winduum.dev/docs/components/dialog.html) to learn more about Javascript API and see usage examples.
+Visit [docs](https://winduum.dev/docs/components/dialog.html) to learn more about JavaScript API and see usage examples.
 
 ## Actions
 
 Controller is present directly on the `dialog` element, so you need to use [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) action to invoke an action outside the controller.
 
 ### show
-Shows a dialog via [showDialog](https://winduum.dev/docs/components/dialog.html#showdialog) method.<br>
+Show a dialog via [showDialog](https://winduum.dev/docs/components/dialog.html#showdialog) method.<br>
 You can add any params from [options](https://winduum.dev/docs/components/dialog.html#showoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params.
 
 #### Example
@@ -39,6 +39,7 @@ You can add any params from [options](https://winduum.dev/docs/components/dialog
 <body data-controller="invoke">
     <button
         class="x-button"
+        data-action="invoke#controller"
         data-invoke-action="x-dialog#show"
         data-invoke-target="#dialogElement"
     >
@@ -52,24 +53,8 @@ You can add any params from [options](https://winduum.dev/docs/components/dialog
 </body>
 ```
 
-#### Example Fetch
-Fetches, appends and shows a dialog via [showDialog](https://winduum.dev/docs/components/dialog.html#showdialog) method.<br>
-You can add any params from [options](https://winduum.dev/docs/components/dialog.html#showoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params.
-
-```html
-<body data-controller="invoke">
-    <button
-        class="x-button"
-        data-invoke-action="x-dialog#show"
-        data-invoke-url="/dialog.json"
-    >
-        Show Dialog
-    </button>
-</body>
-```
-
 ### close
-Closes a dialog via [closeDialog](https://winduum.dev/docs/components/dialog.html#closedialog) method.<br>
+Close a dialog via [closeDialog](https://winduum.dev/docs/components/dialog.html#closedialog) method.<br>
 You can add any params from [options](https://winduum.dev/docs/components/dialog.html#closeoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params.
 
 #### Example
