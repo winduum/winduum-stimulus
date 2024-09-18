@@ -8,8 +8,8 @@ export class Button extends Controller {
     }
 
     loadingAttribute = 'data-loading'
-    spinnerSelector = '.spinner'
-    spinnerHTML = `<span class="spinner"></span>`
+    spinnerSelector = '.spinner-absolute'
+    spinnerHTML = `<span class="spinner spinner-absolute"></span>`
 
     connect() {
         this.observer = new MutationObserver(() => {
