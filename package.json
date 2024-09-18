@@ -10,7 +10,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@newlogic-digital/utils-js": "^1.0.0-next.1",
-    "winduum": "^2.0.0-next.15"
+    "winduum": "^2.0.0-next.24"
   },
   "devDependencies": {
     "eslint": "^9.7.0",

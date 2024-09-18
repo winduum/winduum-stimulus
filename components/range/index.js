@@ -1,6 +1,8 @@
 import { Controller } from '@hotwired/stimulus'
 
 export class Range extends Controller {
+    static targets = ['start', 'end']
+
     async setValue({ currentTarget, params }) {
         const { setValue, setOutputValue, setTrackProperty } = await import('winduum/src/components/range/index.js')
 
@@ -21,14 +23,14 @@ export class Range extends Controller {
 
     async connect() {
         await this.setValue({
-            currentTarget: this.element.querySelectorAll('input[type="range"]')[0],
+            currentTarget: this.startTarget,
             params: {
                 track: 'start'
             }
         })
 
         await this.setValue({
-            currentTarget: this.element.querySelectorAll('input[type="range"]')[1],
+            currentTarget: this.endTarget,
             params: {
                 track: 'end'
             }
