@@ -3,13 +3,16 @@ import { dataset } from '@newlogic-digital/utils-js'
 
 export class Popover extends Controller {
     static targets = ['action']
+    static values = {
+        params: Object
+    }
 
-    async toggle({ currentTarget, params }) {
+    async toggle({ currentTarget }) {
         const { togglePopover } = await import('winduum/src/components/popover/index.js')
 
         this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
 
-        await togglePopover(currentTarget, params)
+        await togglePopover(currentTarget, this.paramsValue ?? arguments[0]?.params)
     }
 
     async hide() {
