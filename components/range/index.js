@@ -15,6 +15,7 @@ export class Range extends Controller {
         setTrackProperty({
             element: this.element.parentElement,
             value: currentTarget.value,
+            min: Number(currentTarget.min) || 0,
             max: Number(currentTarget.max) || 100
         }, params.track ?? 'start')
     }
