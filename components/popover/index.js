@@ -7,6 +7,10 @@ export class Popover extends Controller {
         params: Object
     }
 
+    connect() {
+        this.dispatch('connect')
+    }
+
     async toggle({ currentTarget }) {
         const { togglePopover } = await import('winduum/src/components/popover/index.js')
 
