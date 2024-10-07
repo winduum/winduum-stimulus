@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export class Invoke extends Controller {
-    async controller({ currentTarget }) {
+    async action({ currentTarget }) {
         const [controller, action] = currentTarget.dataset.invokeAction.split('#')
 
         this.application.getControllerForElementAndIdentifier(

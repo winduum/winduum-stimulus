@@ -2,12 +2,11 @@ import { Controller } from '@hotwired/stimulus'
 
 export class Dialog extends Controller {
     static values = {
-        show: String,
         params: Object
     }
 
-    initialize() {
-        if (this.hasShowValue) this.show({ params: this.paramsValue ?? {} })
+    connect() {
+        this.dispatch('connect')
     }
 
     async show(event) {

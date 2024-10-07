@@ -31,7 +31,7 @@ Controller is present directly on the `dialog` element, so you need to use [Invo
 
 ### show
 Show a dialog via [showDialog](https://winduum.dev/docs/components/dialog.html#showdialog) method.<br>
-You can add any params from [options](https://winduum.dev/docs/components/dialog.html#showoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params.
+You can add any params from [options](https://winduum.dev/docs/components/dialog.html#showoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params or via `data-x-dialog-params-value` on `x-dialog`.
 
 #### Example
 
@@ -55,7 +55,7 @@ You can add any params from [options](https://winduum.dev/docs/components/dialog
 
 ### close
 Close a dialog via [closeDialog](https://winduum.dev/docs/components/dialog.html#closedialog) method.<br>
-You can add any params from [options](https://winduum.dev/docs/components/dialog.html#closeoptions) via [Invoke](https://github.com/winduum/winduum-stimulus/tree/main/utilities/invoke) params.
+You can add any params from [options](https://winduum.dev/docs/components/dialog.html#closeoptions) via [Action](https://stimulus.hotwired.dev/reference/actions#action-parameters) params or via `data-x-dialog-params-value` on `x-dialog`.
 
 #### Example
 
