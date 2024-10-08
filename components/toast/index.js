@@ -12,12 +12,12 @@ export class Toast extends Controller {
     async show(event) {
         const { showToast } = await import('winduum/src/components/toaster/index.js')
 
-        await showToast(this.element, this.paramsValue ?? event?.params)
+        await showToast(this.element, this.hasParamsValue ? this.paramsValue : event?.params)
     }
 
     async close(event) {
         const { closeToast } = await import('winduum/src/components/toaster/index.js')
 
-        await closeToast(this.element, this.paramsValue ?? event?.params)
+        await closeToast(this.element, this.hasParamsValue ? this.paramsValue : event?.params)
     }
 }

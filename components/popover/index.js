@@ -16,7 +16,7 @@ export class Popover extends Controller {
 
         this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
 
-        await togglePopover(currentTarget, this.paramsValue ?? arguments[0]?.params)
+        await togglePopover(currentTarget, this.hasParamsValue ? this.paramsValue : arguments[0]?.params)
     }
 
     async hide() {
