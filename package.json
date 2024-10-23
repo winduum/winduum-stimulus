@@ -1,6 +1,6 @@
 {
   "name": "winduum-stimulus",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "type": "module",
   "scripts": {
     "eslint": "eslint '**/*.js'",
@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@newlogic-digital/utils-js": "^1.0.0-next.1",
-    "winduum": "^2.0.0-next.33"
+    "@newlogic-digital/utils-js": "^1.1.0",
+    "winduum": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^9.7.0",
