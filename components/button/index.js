@@ -13,11 +13,15 @@ export class Button extends Controller {
 
     connect() {
         this.observer = new MutationObserver(() => {
-            if (this.element.hasAttribute(this.loadingAttribute)) {
+            const isLoading = this.element.hasAttribute(this.loadingAttribute)
+
+            if (isLoading) {
                 this.element.insertAdjacentHTML('beforeend', this.spinnerHTML)
             } else {
                 this.element.querySelector(this.spinnerSelector).remove()
             }
+
+            this.element.disabled = isLoading
         })
 
         this.loadingValue && this.observer.observe(this.element, {
