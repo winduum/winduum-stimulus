@@ -1,3 +1,6 @@
+# 2.0.4 (2024-10-30)
+* feat: added InvokeFetch class variant
+
 # 2.0.3 (2024-10-29)
 * feat: added disabled attribute on loading state of a button component
 

@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { fetchElement } from '@newlogic-digital/utils-js'
 
 export class Invoke extends Controller {
     async action({ currentTarget }) {
@@ -9,4 +10,24 @@ export class Invoke extends Controller {
             controller
         )[action](arguments[0])
     }
+}
+
+export class InvokeFetch extends Invoke {
+    async action({ currentTarget }) {
+        if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
+            const fetchedElement = await fetchElement(
+                currentTarget,
+                currentTarget.dataset.invokeUrl,
+                currentTarget.dataset.invokeAppendTo
+            )
+
+            this.onFetchComplete(fetchedElement)
+
+            currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
+        }
+
+        await super.action({ currentTarget })
+    }
+
+    onFetchComplete(element) {}
 }
