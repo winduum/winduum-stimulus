@@ -1,3 +1,6 @@
+# 2.0.5 (2024-10-30)
+* fix: toast import typo
+
 # 2.0.4 (2024-10-30)
 * feat: added InvokeFetch class variant
 
