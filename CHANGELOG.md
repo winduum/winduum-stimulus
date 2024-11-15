@@ -1,3 +1,6 @@
+# 2.0.6 (2024-11-15)
+* fix: button loading bug
+
 # 2.0.5 (2024-10-30)
 * fix: toast import typo
 

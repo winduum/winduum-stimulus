@@ -15,6 +15,8 @@ export class Button extends Controller {
         this.observer = new MutationObserver(() => {
             const isLoading = this.element.hasAttribute(this.loadingAttribute)
 
+            if (isLoading && this.element.querySelector(this.spinnerSelector)) return
+
             if (isLoading) {
                 this.element.insertAdjacentHTML('beforeend', this.spinnerHTML)
             } else {
