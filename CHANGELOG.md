@@ -1,3 +1,6 @@
+# 2.0.7 (2024-11-28)
+* feat: added x-drawer dismiss method
+
 # 2.0.6 (2024-11-15)
 * fix: button loading bug
 

@@ -1,6 +1,8 @@
 import { Controller } from '@hotwired/stimulus'
 
 export class Drawer extends Controller {
+    static targets = ['content']
+
     static values = {
         placement: {
             type: String,
@@ -76,5 +78,13 @@ export class Drawer extends Controller {
         }[this.placementValue] ?? []
 
         await closeDrawer(this.element, distance, direction)
+    }
+
+    async dismiss({ target }) {
+        if (!this.element.open) return
+
+        if (!this.contentTarget.contains(target) && !this.contentTarget.isEqualNode(target)) {
+            await this.close()
+        }
     }
 }
