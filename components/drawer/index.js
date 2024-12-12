@@ -14,6 +14,14 @@ export class Drawer extends Controller {
         }
     }
 
+    async connect() {
+        this.element.addEventListener('click', ({ target }) => {
+            if (target.closest('.x-drawer-content') === null) {
+                this.close()
+            }
+        })
+    }
+
     async scroll({ target }) {
         const { scrollDrawer } = await import('winduum/src/components/drawer/index.js')
 
