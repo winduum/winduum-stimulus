@@ -26,7 +26,7 @@ export class InvokeFetch extends Invoke {
             currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
         }
 
-        await super.action({ currentTarget })
+        await super.action(arguments[0])
     }
 
     onFetchComplete(element) {}

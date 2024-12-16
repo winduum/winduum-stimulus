@@ -1,3 +1,6 @@
+# 2.0.8 (2024-12-16)
+* fix: invoke event param
+
 # 2.0.7 (2024-11-28)
 * feat: added x-drawer dismiss method
 
