@@ -1,3 +1,6 @@
+# 2.0.9 (2024-12-16)
+* fix: currentTarget event lost after await
+
 # 2.0.8 (2024-12-16)
 * fix: invoke event param
 

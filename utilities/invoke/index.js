@@ -14,6 +14,12 @@ export class Invoke extends Controller {
 
 export class InvokeFetch extends Invoke {
     async action({ currentTarget }) {
+        const event = new Proxy(arguments[0], {
+            get(target, prop) {
+                return (prop === 'currentTarget') ? currentTarget : target[prop]
+            }
+        })
+
         if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
             const fetchedElement = await fetchElement(
                 currentTarget,
@@ -26,7 +32,7 @@ export class InvokeFetch extends Invoke {
             currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
         }
 
-        await super.action(arguments[0])
+        await super.action(event)
     }
 
     onFetchComplete(element) {}
