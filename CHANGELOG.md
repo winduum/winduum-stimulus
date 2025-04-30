@@ -1,3 +1,6 @@
+# 2.0.10, 2.0.11 (2025-04-30)
+* feat: added carousel component
+
 # 2.0.9 (2024-12-16)
 * fix: currentTarget event lost after await
 
