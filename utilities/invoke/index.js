@@ -2,38 +2,38 @@ import { Controller } from '@hotwired/stimulus'
 import { fetchElement } from '@newlogic-digital/utils-js'
 
 export class Invoke extends Controller {
-    async action({ currentTarget }) {
-        const [controller, action] = currentTarget.dataset.invokeAction.split('#')
+  async action({ currentTarget }) {
+    const [controller, action] = currentTarget.dataset.invokeAction.split('#')
 
-        this.application.getControllerForElementAndIdentifier(
-            document.querySelector(currentTarget.dataset.invokeTarget ?? `.${controller}`),
-            controller
-        )[action](arguments[0])
-    }
+    this.application.getControllerForElementAndIdentifier(
+      document.querySelector(currentTarget.dataset.invokeTarget ?? `.${controller}`),
+      controller,
+    )[action](arguments[0])
+  }
 }
 
 export class InvokeFetch extends Invoke {
-    async action({ currentTarget }) {
-        const event = new Proxy(arguments[0], {
-            get(target, prop) {
-                return (prop === 'currentTarget') ? currentTarget : target[prop]
-            }
-        })
+  async action({ currentTarget }) {
+    const event = new Proxy(arguments[0], {
+      get(target, prop) {
+        return (prop === 'currentTarget') ? currentTarget : target[prop]
+      },
+    })
 
-        if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
-            const fetchedElement = await fetchElement(
-                currentTarget,
-                currentTarget.dataset.invokeUrl,
-                currentTarget.dataset.invokeAppendTo
-            )
+    if (currentTarget.dataset.invokeUrl && !document.querySelector(currentTarget.dataset.invokeTarget)) {
+      const fetchedElement = await fetchElement(
+        currentTarget,
+        currentTarget.dataset.invokeUrl,
+        currentTarget.dataset.invokeAppendTo,
+      )
 
-            this.onFetchComplete(fetchedElement)
+      this.onFetchComplete(fetchedElement)
 
-            currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
-        }
-
-        await super.action(event)
+      currentTarget.dataset.invokeTarget = `#${fetchedElement.id}`
     }
 
-    onFetchComplete(element) {}
+    await super.action(event)
+  }
+
+  onFetchComplete() {}
 }

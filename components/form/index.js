@@ -3,16 +3,16 @@ import { validateForm, validateField } from 'winduum/src/components/form/index.j
 import { dataset } from '@newlogic-digital/utils-js'
 
 export class Form extends Controller {
-    connect() {
-        this.element.noValidate = true
-        dataset(this.element, 'action').add(`submit->${this.identifier}#validateForm`)
-    }
+  connect() {
+    this.element.noValidate = true
+    dataset(this.element, 'action').add(`submit->${this.identifier}#validateForm`)
+  }
 
-    validateForm(event) {
-        validateForm(event, event?.params)
-    }
+  validateForm(event) {
+    validateForm(event, event?.params)
+  }
 
-    validateField({ currentTarget, params }) {
-        validateField(currentTarget, params)
-    }
+  validateField({ currentTarget, params }) {
+    validateField(currentTarget, params)
+  }
 }
