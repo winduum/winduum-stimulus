@@ -1,20 +1,22 @@
 {
   "name": "winduum-stimulus",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "type": "module",
   "scripts": {
-    "eslint": "eslint '**/*.js'",
-    "eslint-fix": "eslint '**/*.js' --fix",
+    "eslint": "eslint",
+    "eslint-fix": "eslint --fix",
     "publish-next": "npm publish --tag next"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@newlogic-digital/utils-js": "^1.1.4",
-    "winduum": "^2.1.4"
+    "@newlogic-digital/utils-js": "^1.2.0",
+    "winduum": "^2.2.17"
   },
   "devDependencies": {
-    "eslint": "^9.15.0",
-    "neostandard": "^0.11.9"
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.0.2",
+    "globals": "^17.4.0"
   },
   "files": [
     "index.js",
