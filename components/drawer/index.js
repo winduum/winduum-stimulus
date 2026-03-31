@@ -79,6 +79,8 @@ export class Drawer extends Controller {
     }[this.placementValue] ?? []
 
     await closeDrawer(this.element, distance, direction)
+
+    if (this.triggerElement) this.triggerElement.ariaExpanded = false
   }
 
   async dismiss({ target }) {
@@ -86,6 +88,19 @@ export class Drawer extends Controller {
 
     if (!this.contentTarget.contains(target) && !this.contentTarget.isEqualNode(target)) {
       await this.close()
+    }
+  }
+
+  async toggle({ currentTarget }) {
+    this.triggerElement = currentTarget
+
+    if (this.element.inert) {
+      currentTarget.ariaExpanded = true
+      this.show()
+    }
+    else {
+      currentTarget.ariaExpanded = false
+      this.close()
     }
   }
 }
