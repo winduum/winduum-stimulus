@@ -3,8 +3,19 @@ import { Controller } from '@hotwired/stimulus'
 export class Carousel extends Controller {
   static targets = ['content', 'counterMin', 'counterMax', 'pagination', 'progress', 'prev', 'next']
 
+  paginationItemContent = '<div class="dot size-2 bg-body-secondary transition data-active:bg-accent cursor-pointer"></div>'
+
   async connect() {
     await this.scroll()
+
+    if (this.hasPaginationTarget) {
+      const { paginationCarousel } = await import('winduum/src/components/carousel/index.js')
+
+      paginationCarousel(this.contentTarget, {
+        element: this.paginationTarget,
+        itemContent: this.paginationItemContent,
+      })
+    }
   }
 
   async scroll() {
