@@ -6,8 +6,10 @@ export class Image extends Controller {
 
     if (!element) return
 
-    if (element?.complete) this.element.classList.remove('before:skeleton')
-    else if (element?.oncanplay) element.oncanplay = () => this.element.classList.remove('before:skeleton')
-    else if (element?.onload) element.onload = () => this.element.classList.remove('before:skeleton')
+    const removeSkeleton = () => this.element.classList.remove('before:skeleton')
+
+    if (element.complete) removeSkeleton()
+    else if (element instanceof HTMLVideoElement) element.oncanplay = removeSkeleton
+    else element.onload = removeSkeleton
   }
 }
