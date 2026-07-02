@@ -1,45 +1,57 @@
 import { Controller } from '@hotwired/stimulus'
 import { dataset } from '@newlogic-digital/utils-js'
+import { supportsAnchoredContainer, supportsAnchor } from 'winduum/src/common.js'
 
 export class Popover extends Controller {
   static targets = ['action']
+
   static values = {
-    params: Object,
+    autoUpdate: Boolean,
+    placement: String,
   }
+
+  open = false
 
   connect() {
-    this.dispatch('connect')
+    this.abortController = new AbortController()
   }
 
-  async toggle({ currentTarget }) {
-    const { togglePopover } = await import('winduum/src/components/popover/index.js')
-
-    this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
-
-    await togglePopover(currentTarget, this.hasParamsValue ? this.paramsValue : arguments[0]?.params)
-  }
-
-  async hide() {
-    if (this.actionTarget.ariaExpanded !== 'true') return
-
-    const { hidePopover } = await import('winduum/src/components/popover/index.js')
-
-    await hidePopover(this.actionTarget)
-  }
-
-  async dismiss({ target }) {
-    if (this.actionTarget.ariaExpanded !== 'true') return
-
-    if (!this.popoverTarget.contains(target) && !this.actionTarget.isEqualNode(target) && this.actionTarget.ariaExpanded === 'true') {
-      await this.hide()
-    }
+  disconnect() {
+    this.abortController?.abort()
   }
 
   actionTargetConnected() {
+    this.popoverElement = document.getElementById(this.actionTarget.getAttribute('popovertarget'))
+
+    this.popoverElement?.addEventListener('toggle', (event) => {
+      this.open = event.newState === 'open'
+      if (this.actionTarget.ariaExpanded) this.actionTarget.ariaExpanded = this.open
+    }, { signal: this.abortController.signal })
+
     dataset(this.actionTarget, 'action').add(
-      `click->${this.identifier}#${this.actionTarget.getAttribute('popovertargetaction')}:prevent`,
-      `keydown.esc@window->${this.identifier}#hide`,
-      `click@window->${this.identifier}#dismiss`,
+      `click->${this.identifier}#${this.actionTarget.getAttribute('popovertargetaction') ?? 'toggle'}:prevent`,
     )
+  }
+
+  async show() {
+    if ((this.autoUpdateValue && !supportsAnchoredContainer) || !supportsAnchor) {
+      const { autoUpdatePopover } = await import('winduum/src/components/popover/index.js')
+
+      this.cleanup = await autoUpdatePopover(this.actionTarget, this.popoverElement, this.placementValue, this.autoUpdateValue)
+    }
+
+    this.popoverElement.showPopover({ source: this.actionTarget })
+  }
+
+  toggle() {
+    !this.open
+      ? this.show()
+      : this.hide()
+  }
+
+  hide() {
+    this.cleanup?.()
+
+    this.popoverElement.hidePopover()
   }
 }

@@ -8,99 +8,56 @@ export class Drawer extends Controller {
       type: String,
       default: 'left',
     },
-    dialog: {
-      type: String,
-      default: 'modal',
+    modal: {
+      type: Boolean,
+      default: true,
     },
   }
 
-  async scroll({ target }) {
-    const { scrollDrawer } = await import('winduum/src/components/drawer/index.js')
+  connect() {
+    this.abortController = new AbortController()
 
-    const bottomTop = {
-      snapClass: 'snap-y snap-mandatory',
-      scrollSize: target.scrollHeight - target.clientHeight,
-      scrollDirection: target.scrollTop,
-    }
-
-    const rightBottom = {
-      scrollClose: 0,
-      opacityRatio: 0,
-    }
-
-    const placement = {
-      right: {
-        ...rightBottom,
-        scrollOpen: target.scrollWidth - target.clientWidth,
-      },
-      bottom: {
-        ...rightBottom,
-        ...bottomTop,
-        scrollOpen: target.scrollHeight - target.clientHeight,
-      },
-      top: {
-        ...bottomTop,
-        scrollOpen: 0,
-        scrollClose: target.scrollHeight - target.clientHeight,
-      },
-    }
-
-    await scrollDrawer(target, placement[this.placementValue])
+    this.element.addEventListener('close', () => {
+      if (this.triggerElement) this.triggerElement.ariaExpanded = false
+    }, { signal: this.abortController.signal })
   }
 
-  async show() {
-    const { showDrawer, scrollInitDrawer } = await import('winduum/src/components/drawer/index.js')
-
-    if (this.dialogValue === 'modal') {
-      this.element.showModal()
-    }
-    else if (this.dialogValue === 'non-modal') {
-      this.element.show()
-    }
-
-    const [distance, distanceClosed, direction] = {
-      right: [this.element.scrollWidth, 0, 'left'],
-      bottom: [this.element.scrollHeight, 0, 'top'],
-      top: [0, this.element.scrollHeight, 'top'],
-    }[this.placementValue] ?? []
-
-    await scrollInitDrawer(this.element, distanceClosed, direction)
-
-    await showDrawer(this.element, distance, direction)
+  disconnect() {
+    this.abortController?.abort()
   }
 
-  async close() {
-    const { closeDrawer } = await import('winduum/src/components/drawer/index.js')
+  async contentTargetConnected() {
+    const { drawerObserver, drawerEvents } = await import('winduum/src/components/drawer/index.js')
 
-    const [distance, direction] = {
-      right: [0, 'left'],
-      bottom: [0, 'top'],
-      top: [this.element.scrollHeight, 'top'],
-    }[this.placementValue] ?? []
+    drawerEvents(this.element, this.contentTarget, this.placementValue, this.abortController.signal)
 
-    await closeDrawer(this.element, distance, direction)
-
-    if (this.triggerElement) this.triggerElement.ariaExpanded = false
+    this.observer = drawerObserver(this.element, this.placementValue)
+    this.observer.observe(this.contentTarget)
   }
 
-  async dismiss({ target }) {
-    if (!this.element.open) return
-
-    if (!this.contentTarget.contains(target) && !this.contentTarget.isEqualNode(target)) {
-      await this.close()
-    }
+  contentTargetDisconnected() {
+    this.observer?.disconnect()
   }
 
-  async toggle({ currentTarget }) {
+  async show({ currentTarget }) {
+    const { showDrawer } = await import('winduum/src/components/drawer/index.js')
+
     this.triggerElement = currentTarget
 
-    if (this.element.inert) {
-      currentTarget.ariaExpanded = true
-      this.show()
-    }
-    else {
-      currentTarget.ariaExpanded = false
-      this.close()
-    }
+    if (this.element.open) return
+    if (this.modalValue) this.element.showModal()
+    else this.element.show()
+
+    currentTarget.ariaExpanded = true
+    showDrawer(this.element.firstElementChild, this.placementValue)
+  }
+
+  close() {
+    this.element.close()
+  }
+
+  toggle(event) {
+    if (this.element.open) this.close()
+    else this.show(event)
   }
 }

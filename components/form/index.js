@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import { validateForm, validateField } from 'winduum/src/components/form/index.js'
+import { validateForm } from 'winduum/src/components/form/index.js'
 import { dataset } from '@newlogic-digital/utils-js'
 
 export class Form extends Controller {
@@ -10,9 +10,5 @@ export class Form extends Controller {
 
   validateForm(event) {
     validateForm(event, event?.params)
-  }
-
-  validateField({ currentTarget, params }) {
-    validateField(currentTarget, params)
   }
 }

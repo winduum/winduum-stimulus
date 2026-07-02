@@ -1,3 +1,16 @@
+# 3.0.0-next.0 (2026-07-02)
+* feat!: updated components to Winduum `3.0.0-next.7` (aligned with `winduum-elements`)
+* feat!: carousel rewritten to new API (`scrollBy`, `toggleScrollState`, `setSnappedAttribute`, `scrollToMarker`) — `pagination`, `counter` and `progress` targets replaced by `markerGroup`/`marker` targets and `vertical` value
+* feat!: drawer rewritten to new dialog-based API (`drawerEvents`, `drawerObserver`, `showDrawer`) — `dialog` value replaced by boolean `modal` value
+* feat!: popover rewritten to native Popover API with anchor positioning and `@floating-ui` fallback (`autoUpdate`, `placement` values)
+* feat!: removed dialog and details components (handled natively in Winduum 3)
+* feat!: form component now only validates on submit — field validation moved to the new field component
+* feat: added field component
+* feat: control component now toggles `data-active` attribute on change
+* feat: button component now shows ripple on click automatically
+* feat: toaster component now uses `toasterObserver`
+* fix: range component no longer calls `setTrackProperty` (handled internally by `setValue`)
+
 # 2.0.10, 2.0.11 (2025-04-30)
 * feat: added carousel component
 

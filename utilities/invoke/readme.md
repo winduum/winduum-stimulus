@@ -10,8 +10,8 @@ This way you can place action anywhere you want. To trigger an invoke action, us
 ```html
     <button
         data-action="click->invoke#action"
-        data-invoke-action="x-dialog#show"
-        data-invoke-target="#dialogElement"
+        data-invoke-action="x-drawer#show"
+        data-invoke-target="#drawerElement"
     >
 ```
 
