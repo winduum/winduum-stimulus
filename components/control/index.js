@@ -12,7 +12,7 @@ export class Control extends Controller {
   toggleActiveAttribute() {
     const telCountryCode = this.element.querySelector('[autocomplete="tel-country-code"]')
 
-    if (telCountryCode) telCountryCode.dataset.value = telCountryCode.value
+    if (telCountryCode) telCountryCode.nextElementSibling.textContent = telCountryCode.value
 
     this.element.toggleAttribute(this.activeAttribute, !!this.element.querySelector('input:not([type="hidden"]), textarea, select')?.value)
   }
