@@ -130,20 +130,26 @@
         <button
             id="popover-trigger"
             type="button"
-            aria-haspopup="dialog"
-            aria-expanded="false"
-            data-action="click->invoke#action"
-            data-invoke-action="x-popover#show"
-            data-invoke-target="#demo-popover"
+            command="toggle-popover"
+            commandfor="demo-popover"
         >
             Open popover
         </button>
+
+
+      <button
+          type="button"
+          interestfor="demo-popover"
+      >
+        Interest popover
+      </button>
 
         <div
             id="demo-popover"
             class="popover"
             popover
             data-controller="x-popover"
+            data-x-popover-auto-update-value="true"
             data-x-popover-placement-value="bottom-start"
         >
             <h2>Native popover</h2>
@@ -153,9 +159,8 @@
             <button
                 id="popover-close"
                 type="button"
-                data-action="click->invoke#action"
-                data-invoke-action="x-popover#hide"
-                data-invoke-target="#demo-popover"
+                command="hide-popover"
+                commandfor="demo-popover"
             >
                 Close
             </button>
