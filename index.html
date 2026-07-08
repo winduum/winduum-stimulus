@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popover demo</title>
+    <link rel="icon" href="data:,">
+    <script type="importmap">
+        {
+            "imports": {
+                "@floating-ui/dom": "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.6/+esm",
+                "@hotwired/stimulus": "https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm",
+                "@newlogic-digital/utils-js": "./node_modules/@newlogic-digital/utils-js/index.js",
+                "winduum/src/": "./node_modules/winduum/src/"
+            }
+        }
+    </script>
+    <style>
+        :root {
+            color-scheme: light dark;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        main {
+            width: min(100% - 32px, 720px);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1;
+        }
+
+        p {
+            max-width: 56ch;
+            margin: 0 0 24px;
+            color: #4b5563;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font: inherit;
+            font-weight: 650;
+            color: #fff;
+            background: #2563eb;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:focus-visible {
+            outline: 3px solid #93c5fd;
+            outline-offset: 3px;
+        }
+
+        #popover-trigger {
+            anchor-name: --popover-trigger;
+        }
+
+        .popover {
+            box-sizing: border-box;
+            position: absolute;
+            position-anchor: --popover-trigger;
+            inset: unset;
+            top: anchor(bottom);
+            left: anchor(left);
+            width: min(320px, calc(100vw - 32px));
+            margin: 10px 0 0;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 18px;
+            color: #111827;
+            background: #fff;
+            box-shadow: 0 20px 45px rgb(15 23 42 / 18%);
+        }
+
+        .popover::backdrop {
+            background: transparent;
+        }
+
+        .popover h2 {
+            margin: 0 0 6px;
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .popover p {
+            margin: 0 0 16px;
+            color: #4b5563;
+        }
+
+        .popover button {
+            padding: 8px 12px;
+            color: #111827;
+            background: #e5e7eb;
+        }
+
+        .popover button:hover {
+            background: #d1d5db;
+        }
+
+        @supports not (anchor-name: --popover-trigger) {
+            .popover {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body data-controller="invoke">
+    <main>
+        <h1>Popover demo</h1>
+        <p>
+            Demo pouziva controller z <code>components/popover/index.js</code> a nacita Stimulus i runtime dependencies pres import mapu.
+        </p>
+
+        <button
+            id="popover-trigger"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            data-action="click->invoke#action"
+            data-invoke-action="x-popover#show"
+            data-invoke-target="#demo-popover"
+        >
+            Open popover
+        </button>
+
+        <div
+            id="demo-popover"
+            class="popover"
+            popover
+            data-controller="x-popover"
+            data-x-popover-placement-value="bottom-start"
+        >
+            <h2>Native popover</h2>
+            <p>
+                Tohle je obsah popoveru spravovany Stimulus controllerem.
+            </p>
+            <button
+                id="popover-close"
+                type="button"
+                data-action="click->invoke#action"
+                data-invoke-action="x-popover#hide"
+                data-invoke-target="#demo-popover"
+            >
+                Close
+            </button>
+        </div>
+    </main>
+
+    <script type="module">
+        import { Application } from '@hotwired/stimulus'
+        import { Popover } from './components/popover/index.js'
+        import { Invoke } from './utilities/invoke/index.js'
+
+        const application = Application.start()
+        application.register('invoke', Invoke)
+        application.register('x-popover', Popover)
+    </script>
+</body>
+</html>

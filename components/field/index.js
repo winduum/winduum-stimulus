@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
-import { validateField } from 'winduum/src/components/form/index.js'
+import { validateField } from 'winduum/src/components/field/index.js'
 import { dataset } from '@newlogic-digital/utils-js'
 
 export class Field extends Controller {
