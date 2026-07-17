@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { supportsAnchoredContainer, supportsAnchor } from 'winduum/src/common.js'
+import { onCommand } from '../../index.js'
 
 export class Popover extends Controller {
   static values = {
@@ -19,13 +20,7 @@ export class Popover extends Controller {
       if (this.source?.ariaExpanded) this.source.ariaExpanded = this.open
     }, { signal: this.abortController.signal })
 
-    this.element.addEventListener('command', (e) => {
-      e.preventDefault()
-
-      const method = e.command.replace(/-\w/g, c => c[1].toUpperCase())
-
-      if (method in this.element) this.element[method](e)
-    })
+    this.element.addEventListener('command', onCommand, { signal: this.abortController.signal })
 
     this.element.showPopover = async ({ source }) => {
       if ((this.autoUpdateValue && !supportsAnchoredContainer) || !supportsAnchor) {
@@ -53,6 +48,10 @@ export class Popover extends Controller {
   }
 
   disconnect() {
+    this.cleanup?.()
+    delete this.element.showPopover
+    delete this.element.togglePopover
+    delete this.element.hidePopover
     this.abortController?.abort()
   }
 }

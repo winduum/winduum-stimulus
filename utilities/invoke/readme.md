@@ -10,13 +10,15 @@ This way you can place action anywhere you want. To trigger an invoke action, us
 ```html
     <button
         data-action="click->invoke#action"
-        data-invoke-action="x-drawer#show"
-        data-invoke-target="#drawerElement"
+        data-invoke-action="x-toaster#close"
+        data-invoke-target="#notifications"
     >
 ```
 
+Native element actions do not need the Invoke controller. For example, open and close Drawer with `command="show-modal"` / `command="request-close"` and `commandfor`.
+
 This action accepts two data attributes:
-* `data-invoke-action` - Defines which controller and which action you want to invoke - `[controller-name]:[controller-action]`
+* `data-invoke-action` - Defines which controller and which action you want to invoke - `[controller-name]#[controller-action]`
 * `data-invoke-target` - Defines selector with the invoked controller
 
 

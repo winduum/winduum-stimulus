@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { onCommand } from '../../index.js'
 
 export class Drawer extends Controller {
   static targets = ['content']
@@ -15,14 +16,37 @@ export class Drawer extends Controller {
   }
 
   connect() {
+    this.showModal = HTMLDialogElement.prototype.showModal
+    this.show = HTMLDialogElement.prototype.show
+    this.close = HTMLDialogElement.prototype.close
     this.abortController = new AbortController()
 
-    this.element.addEventListener('close', () => {
+    this.element.addEventListener('command', onCommand, { signal: this.abortController.signal })
+
+    this.element.showModal = async ({ source }) => {
+      const { showDrawer } = await import('winduum/src/components/drawer/index.js')
+
+      this.triggerElement = source
+
+      if (this.element.open) return
+
+      if (this.modalValue) this.showModal.call(this.element)
+      else this.show.call(this.element)
+
+      source.ariaExpanded = true
+      showDrawer(this.element.firstElementChild, this.placementValue)
+    }
+
+    this.element.close = () => {
+      this.close.call(this.element)
+
       if (this.triggerElement) this.triggerElement.ariaExpanded = false
-    }, { signal: this.abortController.signal })
+    }
   }
 
   disconnect() {
+    delete this.element.showModal
+    delete this.element.close
     this.abortController?.abort()
   }
 
@@ -37,27 +61,5 @@ export class Drawer extends Controller {
 
   contentTargetDisconnected() {
     this.observer?.disconnect()
-  }
-
-  async show({ currentTarget }) {
-    const { showDrawer } = await import('winduum/src/components/drawer/index.js')
-
-    this.triggerElement = currentTarget
-
-    if (this.element.open) return
-    if (this.modalValue) this.element.showModal()
-    else this.element.show()
-
-    currentTarget.ariaExpanded = true
-    showDrawer(this.element.firstElementChild, this.placementValue)
-  }
-
-  close() {
-    this.element.close()
-  }
-
-  toggle(event) {
-    if (this.element.open) this.close()
-    else this.show(event)
   }
 }
