@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { onCommand } from '../../index.js'
 
 export class Drawer extends Controller {
   static targets = ['content']
@@ -8,99 +9,57 @@ export class Drawer extends Controller {
       type: String,
       default: 'left',
     },
-    dialog: {
-      type: String,
-      default: 'modal',
+    modal: {
+      type: Boolean,
+      default: true,
     },
   }
 
-  async scroll({ target }) {
-    const { scrollDrawer } = await import('winduum/src/components/drawer/index.js')
+  connect() {
+    this.showModal = HTMLDialogElement.prototype.showModal
+    this.show = HTMLDialogElement.prototype.show
+    this.close = HTMLDialogElement.prototype.close
+    this.abortController = new AbortController()
 
-    const bottomTop = {
-      snapClass: 'snap-y snap-mandatory',
-      scrollSize: target.scrollHeight - target.clientHeight,
-      scrollDirection: target.scrollTop,
+    this.element.addEventListener('command', onCommand, { signal: this.abortController.signal })
+
+    this.element.showModal = async ({ source }) => {
+      const { showDrawer } = await import('winduum/src/components/drawer/index.js')
+
+      this.triggerElement = source
+
+      if (this.element.open) return
+
+      if (this.modalValue) this.showModal.call(this.element)
+      else this.show.call(this.element)
+
+      source.ariaExpanded = true
+      showDrawer(this.element.firstElementChild, this.placementValue)
     }
 
-    const rightBottom = {
-      scrollClose: 0,
-      opacityRatio: 0,
-    }
+    this.element.close = () => {
+      this.close.call(this.element)
 
-    const placement = {
-      right: {
-        ...rightBottom,
-        scrollOpen: target.scrollWidth - target.clientWidth,
-      },
-      bottom: {
-        ...rightBottom,
-        ...bottomTop,
-        scrollOpen: target.scrollHeight - target.clientHeight,
-      },
-      top: {
-        ...bottomTop,
-        scrollOpen: 0,
-        scrollClose: target.scrollHeight - target.clientHeight,
-      },
-    }
-
-    await scrollDrawer(target, placement[this.placementValue])
-  }
-
-  async show() {
-    const { showDrawer, scrollInitDrawer } = await import('winduum/src/components/drawer/index.js')
-
-    if (this.dialogValue === 'modal') {
-      this.element.showModal()
-    }
-    else if (this.dialogValue === 'non-modal') {
-      this.element.show()
-    }
-
-    const [distance, distanceClosed, direction] = {
-      right: [this.element.scrollWidth, 0, 'left'],
-      bottom: [this.element.scrollHeight, 0, 'top'],
-      top: [0, this.element.scrollHeight, 'top'],
-    }[this.placementValue] ?? []
-
-    await scrollInitDrawer(this.element, distanceClosed, direction)
-
-    await showDrawer(this.element, distance, direction)
-  }
-
-  async close() {
-    const { closeDrawer } = await import('winduum/src/components/drawer/index.js')
-
-    const [distance, direction] = {
-      right: [0, 'left'],
-      bottom: [0, 'top'],
-      top: [this.element.scrollHeight, 'top'],
-    }[this.placementValue] ?? []
-
-    await closeDrawer(this.element, distance, direction)
-
-    if (this.triggerElement) this.triggerElement.ariaExpanded = false
-  }
-
-  async dismiss({ target }) {
-    if (!this.element.open) return
-
-    if (!this.contentTarget.contains(target) && !this.contentTarget.isEqualNode(target)) {
-      await this.close()
+      if (this.triggerElement) this.triggerElement.ariaExpanded = false
     }
   }
 
-  async toggle({ currentTarget }) {
-    this.triggerElement = currentTarget
+  disconnect() {
+    delete this.element.showModal
+    delete this.element.close
+    this.abortController?.abort()
+  }
 
-    if (this.element.inert) {
-      currentTarget.ariaExpanded = true
-      this.show()
-    }
-    else {
-      currentTarget.ariaExpanded = false
-      this.close()
-    }
+  async contentTargetConnected() {
+    const { drawerObserver, drawerEvents } = await import('winduum/src/components/drawer/index.js')
+
+    drawerEvents(this.element, this.contentTarget, this.placementValue, this.abortController.signal)
+
+    this.observer = drawerObserver(this.element, this.placementValue)
+    this.observer.observe(this.contentTarget)
+  }
+
+  contentTargetDisconnected() {
+    this.observer?.disconnect()
   }
 }

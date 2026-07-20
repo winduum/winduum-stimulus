@@ -1,45 +1,57 @@
 import { Controller } from '@hotwired/stimulus'
-import { dataset } from '@newlogic-digital/utils-js'
+import { supportsAnchoredContainer, supportsAnchor } from 'winduum/src/common.js'
+import { onCommand } from '../../index.js'
 
 export class Popover extends Controller {
-  static targets = ['action']
   static values = {
-    params: Object,
+    autoUpdate: Boolean,
+    placement: String,
   }
+
+  open = false
 
   connect() {
-    this.dispatch('connect')
-  }
+    this.showPopover = HTMLElement.prototype.showPopover
+    this.hidePopover = HTMLElement.prototype.hidePopover
+    this.abortController = new AbortController()
 
-  async toggle({ currentTarget }) {
-    const { togglePopover } = await import('winduum/src/components/popover/index.js')
+    this.element.addEventListener('toggle', (event) => {
+      this.open = event.newState === 'open'
+      if (this.source?.ariaExpanded) this.source.ariaExpanded = this.open
+    }, { signal: this.abortController.signal })
 
-    this.popoverTarget = document.getElementById(currentTarget.getAttribute('popovertarget'))
+    this.element.addEventListener('command', onCommand, { signal: this.abortController.signal })
 
-    await togglePopover(currentTarget, this.hasParamsValue ? this.paramsValue : arguments[0]?.params)
-  }
+    this.element.showPopover = async ({ source }) => {
+      if ((this.autoUpdateValue && !supportsAnchoredContainer) || !supportsAnchor) {
+        const { autoUpdatePopover } = await import('winduum/src/components/popover/index.js')
 
-  async hide() {
-    if (this.actionTarget.ariaExpanded !== 'true') return
+        this.cleanup = await autoUpdatePopover(source, this.element, this.placementValue, this.autoUpdateValue)
+      }
 
-    const { hidePopover } = await import('winduum/src/components/popover/index.js')
+      this.source = source
 
-    await hidePopover(this.actionTarget)
-  }
+      this.showPopover.call(this.element, { source })
+    }
 
-  async dismiss({ target }) {
-    if (this.actionTarget.ariaExpanded !== 'true') return
+    this.element.togglePopover = ({ source }) => {
+      !this.open
+        ? this.element.showPopover({ source })
+        : this.element.hidePopover()
+    }
 
-    if (!this.popoverTarget.contains(target) && !this.actionTarget.isEqualNode(target) && this.actionTarget.ariaExpanded === 'true') {
-      await this.hide()
+    this.element.hidePopover = () => {
+      this.cleanup?.()
+
+      this.hidePopover.call(this.element)
     }
   }
 
-  actionTargetConnected() {
-    dataset(this.actionTarget, 'action').add(
-      `click->${this.identifier}#${this.actionTarget.getAttribute('popovertargetaction')}:prevent`,
-      `keydown.esc@window->${this.identifier}#hide`,
-      `click@window->${this.identifier}#dismiss`,
-    )
+  disconnect() {
+    this.cleanup?.()
+    delete this.element.showPopover
+    delete this.element.togglePopover
+    delete this.element.hidePopover
+    this.abortController?.abort()
   }
 }

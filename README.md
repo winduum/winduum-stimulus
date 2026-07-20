@@ -14,6 +14,6 @@ Ready to use components and utilities for Stimulus
 {
   "@hotwired/stimulus": "^3",
   "@newlogic-digital/utils-js": "^1",
-  "winduum": "^2"
+  "winduum": "^3"
 }
 ```

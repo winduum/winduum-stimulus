@@ -1,5 +1,13 @@
 import { dataset } from '@newlogic-digital/utils-js'
 
+export const onCommand = (event) => {
+  event.preventDefault()
+
+  const method = event.command.replace(/-\w/g, c => c[1].toUpperCase())
+
+  if (method in event.currentTarget) event.currentTarget[method](event)
+}
+
 export function initActions(parent, selectors) {
   if (!parent) return
 
@@ -35,4 +43,4 @@ export const useController = (controller, target, application) => {
   return getController
 }
 
-export default { initStimulus, initActions, initControllers, useController }
+export default { onCommand, initStimulus, initActions, initControllers, useController }
