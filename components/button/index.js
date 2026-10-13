@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { dataset } from '@newlogic-digital/utils-js'
 
 export class Button extends Controller {
   static values = {
@@ -30,6 +31,8 @@ export class Button extends Controller {
     this.loadingValue && this.observer.observe(this.element, {
       attributeFilter: [this.loadingAttribute],
     })
+
+    dataset(this.element, 'action').add(`click->${this.identifier}#ripple`)
   }
 
   disconnect() {

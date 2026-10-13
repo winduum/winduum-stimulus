@@ -8,7 +8,7 @@ export class Carousel extends Controller {
   async connect() {
     await this.scroll()
 
-    if (this.hasPaginationTarget) {
+    if (this.hasPaginationTarget && !this.paginationTarget.children.length) {
       const { paginationCarousel } = await import('winduum/src/components/carousel/index.js')
 
       paginationCarousel(this.contentTarget, {
